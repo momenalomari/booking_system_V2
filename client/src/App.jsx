@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 // استدعاء أدوات التوست
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AddField from "./componant/manager/addfield.jsx";
+
 import Hero from "./componant/Landing/landing.jsx";
 import Navbar from "./componant/layout/Navbar/navbar.jsx";
 // 2. كبرنا أول حرف (AdminNavbar) عشان React يفهمه صح
@@ -30,24 +30,19 @@ function AppContent() {
     <>
       {/* الشرط تبعنا صار شغال 100% هسا */}
       {isAdminRoute ? <AdminNavbar /> : <Navbar />}
-      {isAdminRoute ? <AdminFooter /> : <Footer />}
 
-      
-      {/* دمجنا كل الـ Routes بمكان واحد عشان الترتيب */}
       <Routes>
         <Route path="/" element={<Hero />} />
         <Route path="/fields" element={<FieldsList />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/manager/add-field" element={<AddField />} />
         
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/user/dashboard" element={<UserDashboard />} />
         <Route path="/admin/users" element={<ManageUser />} />
       </Routes>
 
-  
-      
+      {isAdminRoute ? <AdminFooter /> : <Footer />}
       {/* حاوية التوست */}
       <ToastContainer position="top-right" autoClose={3000} />
     </>
