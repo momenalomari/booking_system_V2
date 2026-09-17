@@ -6,6 +6,10 @@ import {
   Typography,
   Container,
   Paper,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -19,11 +23,11 @@ const Register = () => {
     phone: "",
     password: "",
     confirm_password: "",
-    role: "user", // القيمة الافتراضية هي "user"
+    role: "user",
+    ownershipProof: null,
   });
 
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState("user"); // القيمة الافتراضية هي "user"
   const navigate = useNavigate(); // أداة للتنقل بين الصفحات برمجياً
 
   // دالة لتحديث البيانات جوا الـ State عند الكتابة
@@ -31,6 +35,13 @@ const Register = () => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleProofChange = (e) => {
+    setFormData({
+      ...formData,
+      ownershipProof: e.target.files?.[0] || null,
     });
   };
 
@@ -45,7 +56,6 @@ const Register = () => {
       formData.phone === "" ||
       formData.password === "" ||
       formData.confirm_password === ""
-
     ) {
       toast.error("الرجاء ملء جميع الحقول");
       return; // return معناها: وقف الكود هون ولا تكمل لتحت
@@ -56,20 +66,59 @@ const Register = () => {
       return;
     }
 
+    if (!/^\+?[0-9\s()-]{7,20}$/.test(formData.phone.trim())) {
+      toast.error("أدخل رقم هاتف صحيح");
+      return;
+    }
+
+    if (formData.role === "owner") {
+      if (!formData.ownershipProof) {
+        toast.error("لا يمكن إنشاء حساب صاحب ملعب بدون مستند يثبت ملكية أو استثمار الملعب");
+        return;
+      }
+
+      const allowedProofTypes = [
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+      ];
+      if (
+        !allowedProofTypes.includes(formData.ownershipProof.type) ||
+        formData.ownershipProof.size > 10 * 1024 * 1024
+      ) {
+        toast.error("أرفق سند ملكية أو عقد استثمار بصيغة PDF أو JPG أو PNG وبحجم أقصى 10MB");
+        return;
+      }
+    }
+
     // إذا وصلنا لهون، معناها البيانات ممتازة واليوزر مش ناسي إشي
     setLoading(true);
 
     try {
+      let requestData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone.trim(),
+        password: formData.password,
+        confirm_password: formData.confirm_password,
+        role: formData.role,
+      };
+
+      if (formData.role === "owner") {
+        const ownerRequestData = new FormData();
+        Object.entries(requestData).forEach(([key, value]) => {
+          ownerRequestData.append(key, value);
+        });
+        ownerRequestData.append("ownershipProof", formData.ownershipProof);
+        requestData = ownerRequestData;
+      }
+
       // إرسال طلب POST للباك إند ومعه بيانات المستخدم
       // غيرنا الكلمة الأخيرة من register إلى create_user
-    const response = await axios.post(
+      const response = await axios.post(
         "http://localhost:5000/api/users/create_user",
-        {
-          ...formData, // جلب جميع البيانات المكتوبة في الحقول
-          role: role   // دمج الدور الصحيح الذي تم اختياره من الكروت
-        }
+        requestData,
       );
-      console.log("الدور اللي رح ينبعث للسيرفر هو:", role);
 
       toast.success(response.data.message || "تم إنشاء الحساب بنجاح! 🎉", {
         toastId: "register_success",
@@ -97,7 +146,6 @@ const Register = () => {
           flexDirection: "column",
           alignItems: "center",
           minHeight: "80vh",
-          backgroundColor: "#f9f9f9",
         }}
       >
         <Paper elevation={3} sx={{ p: 4, width: "100%", borderRadius: "15px" }}>
@@ -126,23 +174,24 @@ const Register = () => {
               margin="normal"
               required
               fullWidth
-              label="الهاتف"
-              name="phone"
-              autoComplete="phone"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
               label="البريد الإلكتروني"
               name="email"
               autoComplete="email"
               value={formData.email}
               onChange={handleChange}
             />
-
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="رقم الهاتف"
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              placeholder="مثال: 0791234567"
+              value={formData.phone}
+              onChange={handleChange}
+            />
             <TextField
               margin="normal"
               required
@@ -166,75 +215,48 @@ const Register = () => {
               value={formData.confirm_password}
               onChange={handleChange}
             />
-            <div
-              style={{
-                display: "flex",
-                gap: "15px",
-                margin: "20px 0",
-                direction: "rtl",
-              }}
-            >
-              {/* كرت الزبون العادي */}
-              <div
-                onClick={() => setRole("user")}
-                style={{
-                  flex: 1,
-                  padding: "15px",
-                  border:
-                    role === "user" ? "2px solid #198754" : "2px solid #ddd",
-                  borderRadius: "8px",
-                  backgroundColor: role === "user" ? "#e8f5e9" : "transparent",
-                  cursor: "pointer",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: role === "user" ? "#198754" : "#666",
-                  transition: "all 0.3s ease",
-                }}
+            <FormControl fullWidth margin="normal" required>
+              <InputLabel id="account-type-label">نوع الحساب</InputLabel>
+              <Select
+                labelId="account-type-label"
+                label="نوع الحساب"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
               >
-                🧑‍🦱 زبون عادي
-                <div
-                  style={{
-                    fontSize: "12px",
-                    marginTop: "8px",
-                    color: role === "user" ? "#198754" : "#999",
-                  }}
+                <MenuItem value="user">مستخدم</MenuItem>
+                <MenuItem value="owner">صاحب ملعب</MenuItem>
+              </Select>
+            </FormControl>
+            {formData.role === "owner" && (
+              <Box sx={{ mt: 1 }}>
+                <Typography variant="subtitle2" sx={{ mt: 2, color: "#006722" }}>
+                  بيانات الملعب وإثبات ملكية أو استثمار الملعب
+                </Typography>
+                <Button
+                  component="label"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  sx={{ mt: 2, borderRadius: "20px" }}
                 >
-                  أريد حجز الملاعب
-                </div>
-              </div>
-
-              {/* كرت صاحب الملعب */}
-              <div
-                onClick={() => setRole("field_manager")}
-                style={{
-                  flex: 1,
-                  padding: "15px",
-                  border:
-                    role === "field_manager"
-                      ? "2px solid #198754"
-                      : "2px solid #ddd",
-                  borderRadius: "8px",
-                  backgroundColor:
-                    role === "field_manager" ? "#e8f5e9" : "transparent",
-                  cursor: "pointer",
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: role === "field_manager" ? "#198754" : "#666",
-                  transition: "all 0.3s ease",
-                }}
-              >
-                🏟️ صاحب ملعب
-                <div
-                  style={{
-                    fontSize: "12px",
-                    marginTop: "8px",
-                    color: role === "field_manager" ? "#198754" : "#999",
-                  }}
-                >
-                  أريد إضافة وإدارة ملعبي
-                </div>
-              </div>
-            </div>
+                  {formData.ownershipProof
+                    ? formData.ownershipProof.name
+                    : "إرفاق سند ملكية أو عقد استثمار الملعب"}
+                  <input
+                    hidden
+                    required
+                    type="file"
+                    accept=".pdf,image/jpeg,image/png"
+                    onChange={handleProofChange}
+                  />
+                </Button>
+                <Typography variant="caption" color="text.secondary">
+                  يجب أن يثبت المستند علاقتك بهذا الملعب، مثل سند ملكية أو عقد إيجار/استثمار.
+                  PDF أو JPG أو PNG، بحد أقصى 10MB.
+                </Typography>
+              </Box>
+            )}
             <Button
               type="submit"
               fullWidth

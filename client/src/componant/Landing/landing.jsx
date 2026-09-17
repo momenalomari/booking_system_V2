@@ -9,7 +9,7 @@ const Hero = () => {
       sx={{
         width: "100%",
         height: "100%",
-        minHeight: "90vh", // يأخذ 80% من طول شاشة المستخدم
+        minHeight: "90vh",
         backgroundImage:
           'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://i.pinimg.com/1200x/f9/ae/7b/f9ae7b7d06b08c85aff75c24db06d767.jpg")',
         backgroundSize: "cover", // قمنا بتغيير هذه الكلمة
@@ -28,7 +28,7 @@ const Hero = () => {
           sx={{
             fontWeight: "bold",
             mb: 2,
-            color: "#FFD700", // لون ذهبي جذاب
+            color: "#FFD700",
             textShadow: "2px 2px 4px rgba(255, 255, 255, 0.5)",
           }}
         >
@@ -57,14 +57,7 @@ const Hero = () => {
             variant="outlined"
             color="inherit"
             size="large"
-            sx={{
-              px: 4,
-              py: 1.5,
-              fontSize: "1.1rem",
-              borderRadius: "30px",
-              border: "2px solid",
-              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
-            }}
+            sx={{ px: 4, py: 1.5, fontSize: "1.1rem", borderRadius: "30px", border: "2px solid", "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" } }}
           >
             تواصل معنا
           </Button>

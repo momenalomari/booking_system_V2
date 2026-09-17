@@ -7,63 +7,37 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import { Link } from "react-router-dom";
 
 const pages = [
-  { name: "home", path: "/" },
-  { name: "stadiums", path: "/fields" }, // تأكد أن الـ path هو نفسه اللي كتبته في App.jsx
-  { name: "contact us", path: "/contact" },
-  { name: "about us", path: "/about" },
-  { name: "login", path: "/login" },
-  { name: "register", path: "/register" },
-];
-const settings = [
-  { name: "Profile", path: "/profile" },
-  { name: "Dashboard", path: "/dashboard" },
-  { name: "Logout", path: "/logout" }, // اللوج آوت لقدام بنعملها دالة مش مسار
+  { name: "الرئيسية", path: "/" },
+  { name: "الملاعب", path: "/fields" },
+  { name: "تسجيل الدخول", path: "/login" },
+  { name: "إنشاء حساب", path: "/register" },
 ];
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#006722" }}>
+    <AppBar position="sticky" sx={{ background: "rgba(18,60,54,.96)", boxShadow: "0 4px 18px rgba(0,0,0,.12)" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box
-            component="img"
-            src={
-              "https://static.vecteezy.com/system/resources/thumbnails/015/720/560/small/abstract-creative-football-illustration-isolated-on-transparent-background-free-png.png"
-            }
-            alt="Booking System Logo"
-            sx={{
-              display: { xs: "none", md: "flex" }, // يظهر فقط عالكمبيوتر
-              height: "80px", // تحكم بطول اللوجو من هنا
-              mr: 1, // مسافة من اليمين
-              cursor: "pointer", // عشان يصير الماوس شكل إصبع لما يمر عليه
-              width: "80px", // يحافظ على نسبة العرض إلى الارتفاع
-            }}
-          />
+          <Box component={Link} to="/" sx={{ display: "flex", alignItems: "center", gap: 1.2, color: "white", textDecoration: "none" }}>
+            <SportsSoccerIcon sx={{ color: "#fbbf24", fontSize: 34 }} />
+            <Typography sx={{ fontWeight: 800, fontSize: { xs: "8rem", md: "1.25rem" } }}>
+              ملعبك
+            </Typography>
+          </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -106,25 +80,6 @@ function Navbar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "Black",
-              textDecoration: "none",
-            }}
-          >
-            BOOKING SYSTEM
-          </Typography>
           <Box
             sx={{
               flexGrow: 1,
@@ -141,64 +96,11 @@ function Navbar() {
                 component={Link}
                 to={page.path}
                 onClick={handleCloseNavMenu}
-                sx={{
-                  my: 1,
-                  mx: 1,
-
-                  display: "block",
-                  color: "white", // اللون الأساسي للزر
-                  fontSize: "18px",
-                  fontWeight: "bold",
-                  textTransform: "uppercase", // عشان الحروف تصير كابيتال
-                  transition: "all 0.3s ease", // حركة ناعمة
-                  borderBottom: "2px solid transparent", // خط شفاف جاهز للتلوين
-
-                  // تأثير الماوس
-                  "&:hover": {
-                    color: "#FFD700", // يتغير النص للذهبي
-                    borderBottom: "2px solid #FFD700", // يظهر خط ذهبي تحت الكلمة
-                  },
-                }}
+                    sx={{ my: 1, mx: 0.5, color: "white", fontWeight: 700, borderRadius: 2,fontSize:{ xs: "0.875rem", md: "1rem" }, "&:hover": { color: "#fbbf24", background: "rgba(255,255,255,.08)" } }}
               >
                 {page.name}
               </Button>
             ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting.name}
-                  onClick={handleCloseUserMenu}
-                  component={Link} // 👈 عشان يصير رابط
-                  to={setting.path} // 👈 عشان يروح ع الداشبورد
-                >
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting.name}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
         </Toolbar>
       </Container>
