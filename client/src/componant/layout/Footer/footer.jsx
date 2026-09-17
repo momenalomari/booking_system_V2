@@ -1,42 +1,37 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
 
-const Footer = () => {
+export default function AdminFooter() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <Box 
-      component="footer" 
-      sx={{ 
-        background: "#123c36", 
-        color: "white", 
-        py: 4, 
-        position: "fixed", // التثبيت
-        bottom: 0, // الإلصاق بالحافة السفلية
-        left: 0,
-        width: "100%", // أخذ عرض الشاشة بالكامل
-        zIndex: 1000, // لضمان بقائه فوق باقي عناصر الصفحة
-        display: "flex", 
-        flexDirection: "column", 
-        alignItems: "center" 
-      }}
-    >
-      <Box 
-        sx={{ 
-          maxWidth: 1200, 
-          mx: "auto", 
-          px: { xs: 3, md: 5 }, 
-          display: "flex", 
-          flexDirection: "column", 
-          alignItems: "center",
-          gap: 2 
-        }}
-      >
+    <footer style={{ 
+      backgroundColor: '#1E293B', // نفس لون النافبار
+      color: '#94A3B8', // لون سكني فاتح مريح للقراءة
+      padding: '20px 40px', 
+      borderTop: '2px solid #0F172A',
+      marginTop: 'auto'
+    }}>
+      
+      <div style={{ 
+        maxWidth: '1300px', 
+        margin: 'auto', 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        flexWrap: 'wrap', // عشان يكون متجاوب مع الشاشات الصغيرة
+        gap: '15px'
         
-        <Typography variant="body2" sx={{ opacity: 0.75 }}>
-          &copy; {new Date().getFullYear()} جميع الحقوق محفوظة
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
+      }}>
+        
+        {/* حقوق النشر واسم النظام */}
+       
+          <p style={{ margin: 0, fontSize: '14px' , justifyContent: 'center', textAlign: 'center', width: '100%' }}>
+            &copy; {currentYear} <span style={{ color: '#4CAF50', fontWeight: 'bold', letterSpacing: '0.5px' }}>Stadium Booking System</span>. All rights reserved.
+          </p>
+        
 
-export default Footer;
+
+      </div>
+    </footer>
+  );
+}

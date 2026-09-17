@@ -16,7 +16,8 @@ export const useUser = () => {
         // حاول الوصول لاسم الخاصية الصحيح (مثلاً data أو users)
         setUsers(response.data.users || response.data || []);
 
-        if (response.data.length === 0) {
+        const loadedUsers = response.data.users || response.data || [];
+        if (loadedUsers.length === 0) {
           toast.warn("لا يوجد مستخدمين حالياً ⚠️", {
             toastId: "warning_no_users",
           });
@@ -34,6 +35,23 @@ export const useUser = () => {
     fetchUsers();
   }, []); // 2. ضفنا الأقواس المربعة هون عشان الكود يشتغل مرة وحدة بس أول ما تفتح الصفحة
 
+  const updateUser = async (id, data) => {
+    const response = await axios.patch(
+      `http://localhost:5000/api/users/${id}`,
+      data,
+    );
+    const updatedUser = response.data.user || response.data;
+    setUsers((currentUsers) =>
+      currentUsers.map((user) => (user._id === id ? updatedUser : user)),
+    );
+    return updatedUser;
+  };
+
+  const deleteUser = async (id) => {
+    await axios.delete(`http://localhost:5000/api/users/${id}`);
+    setUsers((currentUsers) => currentUsers.filter((user) => user._id !== id));
+  };
+
   // 3. ضفنا سطر الإرجاع عشان نقدر نستخدم البيانات بالداشبورد
-  return { users, loading };
+  return { users, loading, updateUser, deleteUser };
 }; // 4. نقلنا قوس النهاية لهون

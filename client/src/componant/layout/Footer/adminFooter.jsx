@@ -10,6 +10,7 @@ export default function AdminFooter() {
       padding: '20px 40px', 
       borderTop: '2px solid #0F172A', // خط علوي أغمق شوي يفصل الفوتر عن المحتوى
       marginTop: 'auto' // عشان يضل دايماً بأسفل الصفحة
+      ,display: 'flex'
       ,position: 'fixed',
     bottom: 0,
     left: 0,
