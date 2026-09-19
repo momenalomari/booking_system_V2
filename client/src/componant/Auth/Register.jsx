@@ -73,20 +73,20 @@ const Register = () => {
 
     if (formData.role === "owner") {
       if (!formData.ownershipProof) {
-        toast.error("لا يمكن إنشاء حساب صاحب ملعب بدون مستند يثبت ملكية أو استثمار الملعب");
+        toast.error(
+          "لا يمكن إنشاء حساب صاحب ملعب بدون مستند يثبت ملكية أو استثمار الملعب",
+        );
         return;
       }
 
-      const allowedProofTypes = [
-        "application/pdf",
-        "image/jpeg",
-        "image/png",
-      ];
+      const allowedProofTypes = ["application/pdf", "image/jpeg", "image/png"];
       if (
         !allowedProofTypes.includes(formData.ownershipProof.type) ||
         formData.ownershipProof.size > 10 * 1024 * 1024
       ) {
-        toast.error("أرفق سند ملكية أو عقد استثمار بصيغة PDF أو JPG أو PNG وبحجم أقصى 10MB");
+        toast.error(
+          "أرفق سند ملكية أو عقد استثمار بصيغة PDF أو JPG أو PNG وبحجم أقصى 10MB",
+        );
         return;
       }
     }
@@ -230,7 +230,10 @@ const Register = () => {
             </FormControl>
             {formData.role === "owner" && (
               <Box sx={{ mt: 1 }}>
-                <Typography variant="subtitle2" sx={{ mt: 2, color: "#006722" }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ mt: 2, color: "#006722" }}
+                >
                   بيانات الملعب وإثبات ملكية أو استثمار الملعب
                 </Typography>
                 <Button
@@ -252,8 +255,8 @@ const Register = () => {
                   />
                 </Button>
                 <Typography variant="caption" color="text.secondary">
-                  يجب أن يثبت المستند علاقتك بهذا الملعب، مثل سند ملكية أو عقد إيجار/استثمار.
-                  PDF أو JPG أو PNG، بحد أقصى 10MB.
+                  يجب أن يثبت المستند علاقتك بهذا الملعب، مثل سند ملكية أو عقد
+                  إيجار/استثمار. PDF أو JPG أو PNG، بحد أقصى 10MB.
                 </Typography>
               </Box>
             )}

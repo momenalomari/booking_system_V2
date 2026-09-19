@@ -38,6 +38,8 @@ export default function Login() {
       localStorage.setItem("token", Token);
       if (user.role === "admin") {
         navigate("/admin/dashboard");
+      } else if (user.role === "owner") {
+        navigate("/owner/dashboard");
       } else {
         // توجيه المستخدم لصفحة الملاعب بعد الدخول
         setTimeout(() => {
@@ -104,4 +106,3 @@ export default function Login() {
     </Container>
   );
 } 
-

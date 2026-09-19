@@ -18,6 +18,7 @@ import Register from "./componant/Auth/Register.jsx";
 import Login from "./componant/Auth/Login.jsx";
 import AdminDashboard from "./componant/admin/admin.dashboard.jsx";
 import UserDashboard from "./componant/user/user.dashboard.jsx";
+import OwnerDashboard from "./componant/Owner/OwnerDashboard.jsx";
 import ManageUser from "./componant/admin/ManageUser.jsx";
 
 
@@ -39,6 +40,7 @@ function AppContent() {
         
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/owner/dashboard" element={<OwnerDashboard />} />
         <Route path="/admin/users" element={<ManageUser />} />
       </Routes>
 

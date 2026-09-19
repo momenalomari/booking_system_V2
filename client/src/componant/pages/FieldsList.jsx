@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -13,15 +13,34 @@ import {
 import { useFields } from "../Hooks/useField"; // تأكد من مسار مجلد الهوك
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SearchIcon from "@mui/icons-material/Search";
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import BookingDialog from "../Booking/BookingDialog";
 
 const FieldsList = () => {
   const { fields, loading } = useFields(); // هون استدعينا العقل المدبر
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = useState("");
+  const [selectedField, setSelectedField] = useState(null);
+  const navigate = useNavigate();
+
   const filteredFields = fields.filter((field) => {
     const query = search.trim().toLowerCase();
-    return !query || field.name?.toLowerCase().includes(query) || field.location?.toLowerCase().includes(query);
+    return (
+      !query ||
+      field.name?.toLowerCase().includes(query) ||
+      field.location?.toLowerCase().includes(query)
+    );
   });
+
+  const handleBookNow = (field) => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user?._id && !user?.id) {
+      toast.info("سجل الدخول أولاً حتى تتمكن من الحجز");
+      navigate("/login");
+      return;
+    }
+    setSelectedField(field);
+  };
 
   // عرض دائرة تحميل لبين ما الداتا توصل من السيرفر
   if (loading) {
@@ -33,7 +52,14 @@ const FieldsList = () => {
   }
 
   return (
-    <Box sx={{ px: { xs: 2, md: 5 }, py: { xs: 4, md: 7 }, backgroundColor: "#f5f7f6", minHeight: "100vh" }}>
+    <Box
+      sx={{
+        px: { xs: 2, md: 5 },
+        py: { xs: 4, md: 7 },
+        backgroundColor: "#f5f7f6",
+        minHeight: "100vh",
+      }}
+    >
       <Typography
         variant="h3"
         align="center"
@@ -51,7 +77,11 @@ const FieldsList = () => {
         onChange={(event) => setSearch(event.target.value)}
         sx={{ maxWidth: 560, display: "block", mx: "auto", mb: 5 }}
         InputProps={{
-          startAdornment: <InputAdornment position="start"><SearchIcon color="action" /></InputAdornment>,
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon color="action" />
+            </InputAdornment>
+          ),
         }}
       />
 
@@ -72,10 +102,21 @@ const FieldsList = () => {
         {filteredFields.map((field) => (
           <Card
             key={field._id}
-            sx={{ width: { xs: "100%", sm: 345 }, borderRadius: 3, boxShadow: "0 12px 30px rgba(18,60,54,.08)", overflow: "hidden", transition: "transform .2s", "&:hover": { transform: "translateY(-5px)" } }}
+            sx={{
+              width: { xs: "100%", sm: 345 },
+              borderRadius: 3,
+              boxShadow: "0 12px 30px rgba(18,60,54,.08)",
+              overflow: "hidden",
+              transition: "transform .2s",
+              "&:hover": { transform: "translateY(-5px)" },
+            }}
           >
             <CardContent sx={{ textAlign: "center" }}>
-              <Typography gutterBottom variant="h5" sx={{ fontWeight: "bold", color: "#18312d" }}>
+              <Typography
+                gutterBottom
+                variant="h5"
+                sx={{ fontWeight: "bold", color: "#18312d" }}
+              >
                 {field.name}
               </Typography>
               <img
@@ -90,17 +131,36 @@ const FieldsList = () => {
                 }}
               />
 
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1, display: "flex", alignItems: "center", gap: .5 }}>
-                <LocationOnIcon fontSize="small" color="primary" /> {field.location}
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 1, display: "flex", alignItems: "center", gap: 0.5 }}
+              >
+                <LocationOnIcon fontSize="small" color="primary" />{" "}
+                {field.location}
               </Typography>
               <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
                 {field.pricePerHour} دينار / ساعة
               </Typography>
-              <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mb: 2 }}>
-                <Chip size="small" label={`${field.rating ?? "جديد"} تقييم`} color="warning" variant="outlined" />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 1,
+                  mb: 2,
+                }}
+              >
                 <Chip
                   size="small"
-                  label={field.isAvailable === false ? "غير متاح" : "متاح للحجز"}
+                  label={`${field.rating ?? "جديد"} تقييم`}
+                  color="warning"
+                  variant="outlined"
+                />
+                <Chip
+                  size="small"
+                  label={
+                    field.isAvailable === false ? "غير متاح" : "متاح للحجز"
+                  }
                   color={field.isAvailable === false ? "default" : "success"}
                   variant="outlined"
                 />
@@ -109,6 +169,8 @@ const FieldsList = () => {
                 variant="contained"
                 color="success"
                 fullWidth
+                disabled={field.isAvailable === false}
+                onClick={() => handleBookNow(field)}
                 sx={{ borderRadius: "20px" }}
               >
                 احجز الآن
@@ -117,6 +179,13 @@ const FieldsList = () => {
           </Card>
         ))}
       </Box>
+
+      {selectedField && (
+        <BookingDialog
+          field={selectedField}
+          onClose={() => setSelectedField(null)}
+        />
+      )}
     </Box>
   );
 };
