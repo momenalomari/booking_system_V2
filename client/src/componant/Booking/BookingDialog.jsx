@@ -63,6 +63,9 @@ export default function BookingDialog({ field, onClose, onBooked }) {
       ),
     );
 
+  const isSlotExpired = (slot) =>
+    new Date(`${date}T${slot.endTime}:00`) <= new Date();
+
   const submitBooking = async () => {
     if (!user?._id && !user?.id) {
       toast.error("سجل الدخول أولاً حتى تتمكن من الحجز");
@@ -126,7 +129,7 @@ export default function BookingDialog({ field, onClose, onBooked }) {
         ) : (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
             {allSlots.map((slot) => {
-              const booked = isSlotBooked(slot);
+              const booked = isSlotExpired(slot) || isSlotBooked(slot);
               const selected =
                 selectedSlot?.startTime === slot.startTime &&
                 selectedSlot?.endTime === slot.endTime;
@@ -135,7 +138,9 @@ export default function BookingDialog({ field, onClose, onBooked }) {
                   key={slot.startTime}
                   label={formatSlot(slot.startTime, slot.endTime)}
                   color={booked ? "default" : selected ? "success" : "primary"}
-                  variant={booked ? "outlined" : selected ? "filled" : "outlined"}
+                  variant={
+                    booked ? "outlined" : selected ? "filled" : "outlined"
+                  }
                   disabled={booked}
                   onClick={() => setSelectedSlot(slot)}
                   sx={{ cursor: booked ? "not-allowed" : "pointer" }}

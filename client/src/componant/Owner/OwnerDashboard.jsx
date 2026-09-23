@@ -34,12 +34,14 @@ const statusLabels = {
   pending: "بانتظار الموافقة",
   confirmed: "مؤكد",
   cancelled: "مرفوض",
+  expired: "منتهي",
 };
 
 const statusColors = {
   pending: "warning",
   confirmed: "success",
   cancelled: "error",
+  expired: "default",
 };
 
 export default function OwnerDashboard() {

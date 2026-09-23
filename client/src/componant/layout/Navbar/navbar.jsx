@@ -10,9 +10,9 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const pages = [
+const publicPages = [
   { name: "الرئيسية", path: "/" },
   { name: "الملاعب", path: "/fields" },
   { name: "تسجيل الدخول", path: "/login" },
@@ -20,6 +20,14 @@ const pages = [
 ];
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+  }, [location.pathname]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -28,13 +36,50 @@ function Navbar() {
     setAnchorElNav(null);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    handleCloseNavMenu();
+    navigate("/login");
+  };
+
+  const pages = user
+    ? [
+        { name: "الرئيسية", path: "/" },
+        { name: "الملاعب", path: "/fields" },
+        user.role === "owner"
+          ? { name: "لوحة المالك", path: "/owner/dashboard" }
+          : user.role === "admin"
+          ? { name: "لوحة الإدارة", path: "/admin/dashboard" }
+          : { name: "لوحتي", path: "/user/dashboard" },
+      ]
+    : publicPages;
+
   return (
-    <AppBar position="sticky" sx={{ background: "rgba(18,60,54,.96)", boxShadow: "0 4px 18px rgba(0,0,0,.12)" }}>
+    <AppBar
+      position="sticky"
+      sx={{
+        background: "rgba(18,60,54,.96)",
+        boxShadow: "0 4px 18px rgba(0,0,0,.12)",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box component={Link} to="/" sx={{ display: "flex", alignItems: "center", gap: 1.2, color: "white", textDecoration: "none" }}>
+          <Box
+            component={Link}
+            to="/"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.2,
+              color: "white",
+              textDecoration: "none",
+            }}
+          >
             <SportsSoccerIcon sx={{ color: "#fbbf24", fontSize: 34 }} />
-            <Typography sx={{ fontWeight: 800, fontSize: { xs: "8rem", md: "1.25rem" } }}>
+            <Typography
+              sx={{ fontWeight: 800, fontSize: { xs: "1rem", md: "1.25rem" } }}
+            >
               ملعبك
             </Typography>
           </Box>
@@ -78,6 +123,13 @@ function Navbar() {
                   </Typography>
                 </MenuItem>
               ))}
+              {user && (
+                <MenuItem onClick={handleLogout}>
+                  <Typography sx={{ textAlign: "center" }}>
+                    تسجيل الخروج
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <Box
@@ -96,11 +148,37 @@ function Navbar() {
                 component={Link}
                 to={page.path}
                 onClick={handleCloseNavMenu}
-                    sx={{ my: 1, mx: 0.5, color: "white", fontWeight: 700, borderRadius: 2,fontSize:{ xs: "0.875rem", md: "1rem" }, "&:hover": { color: "#fbbf24", background: "rgba(255,255,255,.08)" } }}
+                sx={{
+                  my: 1,
+                  mx: 0.5,
+                  color: "white",
+                  fontWeight: 700,
+                  borderRadius: 2,
+                  fontSize: { xs: "0.875rem", md: "1rem" },
+                  "&:hover": {
+                    color: "#fbbf24",
+                    background: "rgba(255,255,255,.08)",
+                  },
+                }}
               >
                 {page.name}
               </Button>
             ))}
+            {user && (
+              <Button
+                onClick={handleLogout}
+                sx={{
+                  my: 1,
+                  mx: 0.5,
+                  color: "#fbbf24",
+                  fontWeight: 700,
+                  borderRadius: 2,
+                  "&:hover": { background: "rgba(255,255,255,.08)" },
+                }}
+              >
+                تسجيل الخروج
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>
