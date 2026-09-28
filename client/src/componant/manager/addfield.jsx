@@ -36,7 +36,7 @@ const AddField = () => {
     setLoading(true);
     try {
       // إرسال البيانات مع managerId للباك إند
-      await axios.post("http://localhost:5000/api/fields/create_field", {
+      await axios.post("https://booking-system-v2-backend.onrender.com/api/fields/create_field", {
         ...formData,
         managerId: managerId, 
       });
