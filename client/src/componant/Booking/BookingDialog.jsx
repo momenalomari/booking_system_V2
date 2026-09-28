@@ -37,7 +37,7 @@ export default function BookingDialog({ field, onClose, onBooked }) {
     setSelectedSlot(null);
     axios
       .get(
-        `http://localhost:5000/api/bookings/booked_slots/${field._id}?date=${date}`,
+        `https://booking-system-v2-backend.onrender.com/api/bookings/booked_slots/${field._id}?date=${date}`,
       )
       .then((res) => {
         if (active) setBookedSlots(res.data.bookedSlots || []);
