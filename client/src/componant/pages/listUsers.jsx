@@ -11,7 +11,7 @@ useEffect(() => {
     const fetchRequests = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/admin/field-managers/pending"
+          "https://booking-system-v2-backend.onrender.com/api/admin/field-managers/pending"
         );
         console.log("البيانات القادمة من السيرفر:", response.data);
 
