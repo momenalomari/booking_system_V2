@@ -37,7 +37,7 @@ export default function BookingDialog({ field, onClose, onBooked }) {
     setSelectedSlot(null);
     axios
       .get(
-        `http://localhost:5000/api/bookings/booked_slots/${field._id}?date=${date}`,
+        `https://booking-system-v2-backend.onrender.com/api/bookings/booked_slots/${field._id}?date=${date}`,
       )
       .then((res) => {
         if (active) setBookedSlots(res.data.bookedSlots || []);
@@ -77,7 +77,7 @@ export default function BookingDialog({ field, onClose, onBooked }) {
     }
     setSaving(true);
     try {
-      await axios.post("http://localhost:5000/api/bookings/create_booking", {
+      await axios.post("https://booking-system-v2-backend.onrender.com/api/bookings/create_booking", {
         fieldId: field._id,
         userId: user._id || user.id,
         date,

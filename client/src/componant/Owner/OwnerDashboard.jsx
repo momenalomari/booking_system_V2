@@ -75,10 +75,10 @@ export default function OwnerDashboard() {
     try {
       const [fieldsRes, bookingsRes] = await Promise.all([
         axios.get(
-          `http://localhost:5000/api/fields/manager_fields/${managerId}`,
+          `https://booking-system-v2-backend.onrender.com/api/fields/manager_fields/${managerId}`,
         ),
         axios.get(
-          `http://localhost:5000/api/bookings/manager_bookings/${managerId}`,
+          `https://booking-system-v2-backend.onrender.com/api/bookings/manager_bookings/${managerId}`,
         ),
       ]);
       setFields(fieldsRes.data || []);
@@ -142,7 +142,7 @@ export default function OwnerDashboard() {
     setBusyId(bookingId);
     try {
       const res = await axios.patch(
-        `http://localhost:5000/api/bookings/update_booking_status/${bookingId}`,
+        `https://booking-system-v2-backend.onrender.com/api/bookings/update_booking_status/${bookingId}`,
         { status },
       );
       setBookings((current) =>
@@ -169,7 +169,7 @@ export default function OwnerDashboard() {
     }
     setAddingField(true);
     try {
-      await axios.post("http://localhost:5000/api/fields/create_field", {
+      await axios.post("https://booking-system-v2-backend.onrender.com/api/fields/create_field", {
         managerId,
         name: newField.name.trim(),
         location: newField.location.trim(),

@@ -116,7 +116,7 @@ const Register = () => {
       // إرسال طلب POST للباك إند ومعه بيانات المستخدم
       // غيرنا الكلمة الأخيرة من register إلى create_user
       const response = await axios.post(
-        "http://localhost:5000/api/users/create_user",
+        "https://booking-system-v2-backend.onrender.com/api/users/create_user",
         requestData,
       );
 

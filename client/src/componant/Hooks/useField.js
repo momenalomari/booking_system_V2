@@ -10,7 +10,7 @@ export const useFields = () => {
     const fetchFields = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/fields/all_fields",
+          "https://booking-system-v2-backend.onrender.com/api/fields/all_fields",
         );
         setFields(response.data);
         if (response.data.length === 0) {

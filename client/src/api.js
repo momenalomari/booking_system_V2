@@ -1,13 +1,10 @@
 import axios from "axios";
 
-
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
-    headers: {
+  baseURL: "https://booking-system-v2-backend.onrender.com/api",
+  headers: {
     "Content-Type": "application/json",
-    
-   },
-   withCredentials: true, 
-    },
-);
+  },
+  withCredentials: true,
+});
 export default api;

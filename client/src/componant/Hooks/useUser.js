@@ -11,7 +11,7 @@ export const useUser = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/users/users",
+          "https://booking-system-v2-backend.onrender.com/api/users/users",
         );
         // حاول الوصول لاسم الخاصية الصحيح (مثلاً data أو users)
         setUsers(response.data.users || response.data || []);
@@ -37,7 +37,7 @@ export const useUser = () => {
 
   const updateUser = async (id, data) => {
     const response = await axios.patch(
-      `http://localhost:5000/api/users/${id}`,
+      `https://booking-system-v2-backend.onrender.com/api/users/${id}`,
       data,
     );
     const updatedUser = response.data.user || response.data;
@@ -48,7 +48,7 @@ export const useUser = () => {
   };
 
   const deleteUser = async (id) => {
-    await axios.delete(`http://localhost:5000/api/users/${id}`);
+    await axios.delete(`https://booking-system-v2-backend.onrender.com/api/users/${id}`);
     setUsers((currentUsers) => currentUsers.filter((user) => user._id !== id));
   };
 
