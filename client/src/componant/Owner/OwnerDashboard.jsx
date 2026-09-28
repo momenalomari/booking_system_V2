@@ -75,10 +75,10 @@ export default function OwnerDashboard() {
     try {
       const [fieldsRes, bookingsRes] = await Promise.all([
         axios.get(
-          `http://localhost:5000/api/fields/manager_fields/${managerId}`,
+          `https://booking-system-v2-backend.onrender.com/api/fields/manager_fields/${managerId}`,
         ),
         axios.get(
-          `http://localhost:5000/api/bookings/manager_bookings/${managerId}`,
+          `https://booking-system-v2-backend.onrender.com/api/bookings/manager_bookings/${managerId}`,
         ),
       ]);
       setFields(fieldsRes.data || []);
