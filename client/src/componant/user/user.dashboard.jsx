@@ -31,7 +31,7 @@ export default function UserDashboard() {
     const fetchBookings = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/bookings/my_bookings/${userId}`,
+          `https://booking-system-v2-backend.onrender.com/api/bookings/my_bookings/${userId}`,
         );
         if (!active) return;
 
