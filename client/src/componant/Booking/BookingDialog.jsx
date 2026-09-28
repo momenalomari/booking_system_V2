@@ -77,7 +77,7 @@ export default function BookingDialog({ field, onClose, onBooked }) {
     }
     setSaving(true);
     try {
-      await axios.post("http://localhost:5000/api/bookings/create_booking", {
+      await axios.post("https://booking-system-v2-backend.onrender.com/api/bookings/create_booking", {
         fieldId: field._id,
         userId: user._id || user.id,
         date,
