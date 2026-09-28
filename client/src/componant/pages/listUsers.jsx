@@ -40,7 +40,7 @@ useEffect(() => {
   const handleReview = async (userId, action) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/admin/field-managers/${userId}/review`,
+        `https://booking-system-v2-backend.onrender.com/api/admin/field-managers/${userId}/review`,
         {
           action: action 
         }
