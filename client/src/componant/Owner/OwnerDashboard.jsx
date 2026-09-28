@@ -142,7 +142,7 @@ export default function OwnerDashboard() {
     setBusyId(bookingId);
     try {
       const res = await axios.patch(
-        `http://localhost:5000/api/bookings/update_booking_status/${bookingId}`,
+        `https://booking-system-v2-backend.onrender.com/api/bookings/update_booking_status/${bookingId}`,
         { status },
       );
       setBookings((current) =>
