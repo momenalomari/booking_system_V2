@@ -38,6 +38,7 @@ const AddField = () => {
     setLoading(true);
     try {
       // إرسال البيانات مع managerId للباك إند
+<<<<<<< HEAD
       await axios.post(
         "https://booking-system-v2-backend.onrender.com/api/fields/create_field",
         {
@@ -45,6 +46,12 @@ const AddField = () => {
           managerId: managerId,
         },
       );
+=======
+      await axios.post("https://booking-system-v2-backend.onrender.com/api/fields/create_field", {
+        ...formData,
+        managerId: managerId, 
+      });
+>>>>>>> 411ed307cb8edb27410871df62577cd1409d0e8a
 
       toast.success("تم إضافة الملعب بنجاح! 🏟️");
 

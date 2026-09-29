@@ -169,6 +169,7 @@ export default function OwnerDashboard() {
     }
     setAddingField(true);
     try {
+<<<<<<< HEAD
       await axios.post(
         "https://booking-system-v2-backend.onrender.com/api/fields/create_field",
         {
@@ -181,6 +182,17 @@ export default function OwnerDashboard() {
           image: newField.image,
         },
       );
+=======
+      await axios.post("https://booking-system-v2-backend.onrender.com/api/fields/create_field", {
+        managerId,
+        name: newField.name.trim(),
+        location: newField.location.trim(),
+        type: newField.type,
+        pricePerHour: Number(newField.pricePerHour),
+        description: newField.description,
+        image: newField.image,
+      });
+>>>>>>> 411ed307cb8edb27410871df62577cd1409d0e8a
       toast.success("تمت إضافة الملعب بنجاح");
       setNewField({
         name: "",

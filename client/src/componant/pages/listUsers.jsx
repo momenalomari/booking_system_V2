@@ -11,7 +11,7 @@ const ManageFields = () => {
     const fetchRequests = async () => {
       try {
         const response = await axios.get(
-          "https://booking-system-v2-backend.onrender.com/api/admin/field-managers/pending",
+          "https://booking-system-v2-backend.onrender.com/api/admin/field-managers/pending"
         );
         console.log("البيانات القادمة من السيرفر:", response.data);
 
