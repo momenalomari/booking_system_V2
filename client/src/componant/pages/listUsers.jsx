@@ -6,12 +6,12 @@ const ManageFields = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
 
   // 1. تعريف دالة الجلب أولاً
-useEffect(() => {
+  useEffect(() => {
     // 1. تعريف الدالة داخل useEffect مباشرة
     const fetchRequests = async () => {
       try {
         const response = await axios.get(
-          "https://booking-system-v2-backend.onrender.com/api/admin/field-managers/pending"
+          "https://booking-system-v2-backend.onrender.com/api/admin/field-managers/pending",
         );
         console.log("البيانات القادمة من السيرفر:", response.data);
 
@@ -42,19 +42,19 @@ useEffect(() => {
       await axios.patch(
         `https://booking-system-v2-backend.onrender.com/api/admin/field-managers/${userId}/review`,
         {
-          action: action 
-        }
+          action: action,
+        },
       );
 
       toast.success(
-        `تم ${action === "approved" ? "قبول" : "رفض"} صاحب الملعب بنجاح`
+        `تم ${action === "approved" ? "قبول" : "رفض"} صاحب الملعب بنجاح`,
       );
 
       setPendingRequests((prev) => prev.filter((req) => req._id !== userId));
     } catch (error) {
       console.log("سبب الرفض من السيرفر:", error.response?.data);
       toast.error(
-        error.response?.data?.message || "حدث خطأ أثناء معالجة الطلب"
+        error.response?.data?.message || "حدث خطأ أثناء معالجة الطلب",
       );
     }
   };

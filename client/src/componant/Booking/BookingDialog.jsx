@@ -77,13 +77,16 @@ export default function BookingDialog({ field, onClose, onBooked }) {
     }
     setSaving(true);
     try {
-      await axios.post("https://booking-system-v2-backend.onrender.com/api/bookings/create_booking", {
-        fieldId: field._id,
-        userId: user._id || user.id,
-        date,
-        startTime: selectedSlot.startTime,
-        endTime: selectedSlot.endTime,
-      });
+      await axios.post(
+        "https://booking-system-v2-backend.onrender.com/api/bookings/create_booking",
+        {
+          fieldId: field._id,
+          userId: user._id || user.id,
+          date,
+          startTime: selectedSlot.startTime,
+          endTime: selectedSlot.endTime,
+        },
+      );
       toast.success("تم إرسال طلب الحجز، بانتظار موافقة صاحب الملعب");
       setSelectedSlot(null);
       onBooked?.();

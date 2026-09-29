@@ -48,7 +48,9 @@ export const useUser = () => {
   };
 
   const deleteUser = async (id) => {
-    await axios.delete(`https://booking-system-v2-backend.onrender.com/api/users/${id}`);
+    await axios.delete(
+      `https://booking-system-v2-backend.onrender.com/api/users/${id}`,
+    );
     setUsers((currentUsers) => currentUsers.filter((user) => user._id !== id));
   };
 

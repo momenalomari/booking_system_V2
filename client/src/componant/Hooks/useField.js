@@ -18,9 +18,8 @@ export const useFields = () => {
           toast.warn("لا توجد ملاعب متاحة حالياً ⚠️", {
             toastId: "warning_no_fields", // هذا السطر بيمنع ظهورها مرتين بنفس اللحظة
           });
-        } 
+        }
 
-       
         // 2. إطلاق توست النجاح الأخضر مع منع التكرار
         toast.success("تم جلب الملاعب بنجاح! ⚽", {
           toastId: "success_fetch_fields", // هذا السطر بيمنع ظهورها مرتين بنفس اللحظة

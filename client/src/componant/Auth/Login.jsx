@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography, Container, Paper } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Container,
+  Paper,
+} from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify"; // استخدمنا نفس المكتبة الموحدة
 import { useNavigate, Link } from "react-router-dom"; // للتوجيه
@@ -25,10 +32,13 @@ export default function Login() {
 
     try {
       // إرسال الطلب للباك إند
-      const res = await axios.post("https://booking-system-v2-backend.onrender.com/api/users/login", formData);
+      const res = await axios.post(
+        "https://booking-system-v2-backend.onrender.com/api/users/login",
+        formData,
+      );
 
       toast.success(res.data.message || "تم تسجيل الدخول بنجاح! ⚽", {
-        toastId: "login_success"
+        toastId: "login_success",
       });
 
       // 🔑 الخطوة الذهبية: حفظ التوكن في المتصفح
@@ -46,9 +56,9 @@ export default function Login() {
           navigate("/user/dashboard");
         }, 1500);
       }
-
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول";
+      const errorMsg =
+        error.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول";
       toast.error(errorMsg);
     } finally {
       setLoading(false);
@@ -57,9 +67,22 @@ export default function Login() {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Box sx={{ mt: 8, display: "flex", flexDirection: "column", alignItems: "center", minHeight: "80vh" }}>
+      <Box
+        sx={{
+          mt: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          minHeight: "80vh",
+        }}
+      >
         <Paper elevation={3} sx={{ p: 4, width: "100%", borderRadius: "15px" }}>
-          <Typography component="h1" variant="h5" align="center" sx={{ fontWeight: "bold", mb: 3, color: "#006722" }}>
+          <Typography
+            component="h1"
+            variant="h5"
+            align="center"
+            sx={{ fontWeight: "bold", mb: 3, color: "#006722" }}
+          >
             تسجيل الدخول
           </Typography>
 
@@ -71,7 +94,9 @@ export default function Login() {
               label="البريد الإلكتروني"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             <TextField
               margin="normal"
@@ -80,23 +105,38 @@ export default function Login() {
               label="كلمة المرور"
               type="password"
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
-            
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="success"
               disabled={loading}
-              sx={{ mt: 3, mb: 2, borderRadius: "20px", p: 1, fontWeight: "bold" }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                borderRadius: "20px",
+                p: 1,
+                fontWeight: "bold",
+              }}
             >
               {loading ? "جاري الدخول..." : "دخول"}
             </Button>
 
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
               ليس لديك حساب؟{" "}
-              <Link to="/register" style={{ color: "#006722", fontWeight: "bold", textDecoration: "none" }}>
+              <Link
+                to="/register"
+                style={{
+                  color: "#006722",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                }}
+              >
                 إنشاء حساب جديد
               </Link>
             </Typography>
@@ -105,4 +145,4 @@ export default function Login() {
       </Box>
     </Container>
   );
-} 
+}
